@@ -12,3 +12,7 @@
   - Create Hello world console app from any version
   - Copy code from this project PromotionEngineApp folder
   - Paste it in your console app solution
+
+#### Unit Test Coverage
+
+![image](https://user-images.githubusercontent.com/2716202/124348609-71add980-dc08-11eb-8026-d098d305fca5.png)

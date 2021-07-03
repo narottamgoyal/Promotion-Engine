@@ -1,9 +1,11 @@
 ﻿using PromotionEngineApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace PromotionEngineApp
 {
+    [ExcludeFromCodeCoverage]
     public class MainApp
     {
         private static void Main(string[] args)

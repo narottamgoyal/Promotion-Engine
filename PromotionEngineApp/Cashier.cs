@@ -47,7 +47,7 @@ namespace PromotionEngineApp
 
                             var quantity = currentProduct.Product.Quantity / promotionalItem.Products[0].Quantity;
                             total += quantity * promotionalItem.Price;
-                            var remainingProductQuantity = currentProduct.Product.Quantity % promotionalItem.Products[0].Quantity;
+                            var remainingProductQuantity = GetRemainingProductQuantity(currentProduct.Product.Quantity, promotionalItem.Products[0].Quantity);
                             if (remainingProductQuantity > 0)
                             {
                                 productList.Add(new ProductState(new Product { Quantity = remainingProductQuantity, SKU_Id = currentProduct.Product.SKU_Id }, false));
@@ -67,7 +67,7 @@ namespace PromotionEngineApp
                                 foreach (var promotionalItemProduct in otherPromotionalMandatoryItems)
                                 {
                                     var unprocessedProduct = otherUnprocessedProduct.First(x => x.Product.SKU_Id == promotionalItemProduct.SKU_Id);
-                                    var remainingOtherProductQuantity = unprocessedProduct.Product.Quantity % promotionalItemProduct.Quantity;
+                                    var remainingOtherProductQuantity = GetRemainingProductQuantity(unprocessedProduct.Product.Quantity, promotionalItemProduct.Quantity);
                                     if (remainingOtherProductQuantity > 0)
                                     {
                                         productList.Add(new ProductState(new Product { Quantity = remainingOtherProductQuantity, SKU_Id = unprocessedProduct.Product.SKU_Id }, false));
@@ -75,7 +75,7 @@ namespace PromotionEngineApp
                                     unprocessedProduct.IsProcessed = true;
                                 }
 
-                                var remainingProductQuantity = currentProduct.Product.Quantity % currentPromotionalItem.Quantity;
+                                var remainingProductQuantity = GetRemainingProductQuantity(currentProduct.Product.Quantity, currentPromotionalItem.Quantity);
                                 if (remainingProductQuantity > 0)
                                 {
                                     productList.Add(new ProductState(new Product { Quantity = remainingProductQuantity, SKU_Id = currentProduct.Product.SKU_Id }, false));
@@ -97,6 +97,12 @@ namespace PromotionEngineApp
             }
 
             return total;
+        }
+
+        private int GetRemainingProductQuantity(int productQuantity, int promotionalQuantity)
+        {
+            if (promotionalQuantity == 1) return productQuantity - promotionalQuantity;
+            return productQuantity % promotionalQuantity;
         }
     }
 }

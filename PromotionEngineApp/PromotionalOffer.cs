@@ -1,4 +1,5 @@
-﻿using PromotionEngineApp.Model;
+﻿using PromotionEngineApp.Exceptions;
+using PromotionEngineApp.Model;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +19,15 @@ namespace PromotionEngineApp
         {
             var sku_ids = _skuList.Select(y => y.Id);
             if (!offer.Products.All(x => sku_ids.Any(y => y == x.SKU_Id))) return;
+            Validate(offer);
             _offers.Add(offer);
+        }
+
+        private void Validate(Offer offer)
+        {
+            var cRrecord = string.Join("", offer.Products.SelectMany(x => $"{x.Quantity}:{x.SKU_Id}"));
+            var oldRecord = _offers.Select(y => string.Join("", y.Products.Select(x => $"{x.Quantity}:{x.SKU_Id}")));
+            if (oldRecord.Contains(cRrecord)) throw new DuplicateOfferException();
         }
 
         public List<Offer> GetPromotions()
